@@ -7,41 +7,38 @@ $resultado = [
 
 $config = include 'config.php';
 
-if (isset($_POST['submit_create'])) {
-   try {
-      $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-      $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+if (isset($_POST['submit_update'])) {
+  try {
+    $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
+    $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    
+    $update_empleado = [
+      "nombre"   => $_POST['nombre'],
+      "apellido" => $_POST['apellido'],
+      "edad"     => $_POST['edad'],
+      "ci"   => $_POST['CI'],
+      "email"    => $_POST['email'],
+      "empresa"  => $_POST['empresa'],
+      "cargo"    => $_POST['cargo'],
+      "id"       => $_POST['id']   
+   ];
 
-      // Insercion de datos
-
-      $new_empleado = [
-         "nombre"   => $_POST['nombre'],
-         "apellido" => $_POST['apellido'],
-         "edad"     => $_POST['edad'],
-         "ci"       => $_POST['CI'],
-         "email"    => $_POST['email'],
-         "empresa"  => $_POST['empresa'],
-         "cargo"    => $_POST['cargo'],
-         
-      ];
-
-      $consultaSQL = "INSERT INTO empleados(`nombre`, `apellido`, `edad`, `cedula`, `email`, `empresa`, `cargo`) ";
-
-      $consultaSQL .= "values (:" . implode(", :", array_keys($new_empleado)) . ")";
+  $consultaSQL = "UPDATE empleados SET nombre = '". $update_empleado['nombre'] ."', apellido = '". $update_empleado['apellido'] ."', edad = '". $update_empleado['edad'] ."', cedula = '". $update_empleado['ci'] ."', email = '". $update_empleado['email'] ."', empresa = '". $update_empleado['empresa'] ."', cargo = '". $update_empleado['cargo'] ."', updated_at = NOW() WHERE id = ". $update_empleado['id'] ." ;";
   
-      $insert = $conexion->prepare($consultaSQL);
-      $insert->execute($new_empleado);
+  $update = $conexion->prepare($consultaSQL);
 
-      $resultado = [
+  $update->execute();
+
+  $resultado = [
          'error' => false,
-         'mensaje' => '¡Registro exitoso!'
-      ];
+         'mensaje' => 'El registro ha sido editado.'
+  ];
 
-   } catch(PDOException $error) {
-      $resultado['error'] = true;
-      $resultado['mensaje'] = $error->getMessage();
-   }
-   
+  } catch(PDOException $error) {
+    $resultado['error'] = true;
+    $resultado['mensaje'] = $error->getMessage();
+  }
+
 } else{
    $resultado = [
     'error' => true,
@@ -67,7 +64,7 @@ if (isset($_POST['submit_create'])) {
     <script  type="text/javascript" src="JS/main.js"></script>
 
    <!---     | Titulo |     -->
-   <title>Registro exitoso</title>
+   <title>Registro editado correctamente</title>
 
 
 </head>
@@ -80,7 +77,7 @@ if (isset($_POST['submit_create'])) {
       <div id="popup" class="w3-modal">
       <div class="w3-modal-content w3-animate-zoom">
 
-         <header class="w3-container w3-blue w3-center">
+         <header class="w3-container w3-green w3-center">
             <h2> Proceso terminado con exito!</h2>
          </header>
 
@@ -91,7 +88,7 @@ if (isset($_POST['submit_create'])) {
             <p>'.$resultado['mensaje'].'</p>
             <p>Por favor, preciona "volver" para volver a la pagina principal.</p>
 
-            <a href="index.php" class="w3-button w3-round w3-blue w3-margin-bottom"><i class="fa fa-arrow-left"></i> Volver</a>
+            <a href="index.php" class="w3-button w3-round w3-green w3-margin-bottom"><i class="fa fa-arrow-left"></i> Volver</a>
          </div>
 
       </div>
@@ -116,7 +113,7 @@ if (isset($_POST['submit_create'])) {
             <p>Por favor preciona "volver" para intentarlo nuevamente.</p>
             <p>Si el error perciste consulte con el administrador de la pagina.</p>
 
-            <a href="index.php" class="w3-button w3-round w3-red w3-margin-bottom"><i class="fa fa-arrow-left"></i> Volver</a>
+            <a href="index.php" class="w3-button w3-round w3-red w3-margin-bottom"><i class="fa fa-arrow-left"></i> volver</a>
          </div>
 
       </div>
@@ -140,3 +137,4 @@ if (isset($resultado)) {
 
 </body>
 </html>
+

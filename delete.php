@@ -1,49 +1,36 @@
 <?php
 
-$resultado = [
-    'error' => false,
-    'mensaje' => ''
-];
-
 $config = include 'config.php';
 
-if (isset($_POST['submit_create'])) {
-   try {
-      $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-      $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+$resultado = [
+  'error' => false,
+  'mensaje' => ''
+];
 
-      // Insercion de datos
+if(isset($_POST['submit_delete'])){
 
-      $new_empleado = [
-         "nombre"   => $_POST['nombre'],
-         "apellido" => $_POST['apellido'],
-         "edad"     => $_POST['edad'],
-         "ci"       => $_POST['CI'],
-         "email"    => $_POST['email'],
-         "empresa"  => $_POST['empresa'],
-         "cargo"    => $_POST['cargo'],
-         
-      ];
+  try {
+  $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
+  $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    
+  $id = $_POST['id'];
+  $consultaSQL = "DELETE FROM empleados WHERE id =" . $id;
 
-      $consultaSQL = "INSERT INTO empleados(`nombre`, `apellido`, `edad`, `cedula`, `email`, `empresa`, `cargo`) ";
+  $delete = $conexion->prepare($consultaSQL);
+  $delete->execute();
 
-      $consultaSQL .= "values (:" . implode(", :", array_keys($new_empleado)) . ")";
-  
-      $insert = $conexion->prepare($consultaSQL);
-      $insert->execute($new_empleado);
-
-      $resultado = [
+  $resultado = [
          'error' => false,
-         'mensaje' => '¡Registro exitoso!'
-      ];
+         'mensaje' => 'El  registro fue eliminado correctamente.'
+   ];
 
-   } catch(PDOException $error) {
-      $resultado['error'] = true;
-      $resultado['mensaje'] = $error->getMessage();
-   }
-   
+} catch(PDOException $error) {
+  $resultado['error'] = true;
+  $resultado['mensaje'] = $error->getMessage();
+}
+
 } else{
-   $resultado = [
+  $resultado = [
     'error' => true,
     'mensaje' => '¡Hubo un error! El formulario no se envio correctamente.'
    ];
@@ -67,7 +54,7 @@ if (isset($_POST['submit_create'])) {
     <script  type="text/javascript" src="JS/main.js"></script>
 
    <!---     | Titulo |     -->
-   <title>Registro exitoso</title>
+   <title>Usuario eliminado</title>
 
 
 </head>
@@ -86,7 +73,7 @@ if (isset($_POST['submit_create'])) {
 
          <div class="w3-container w3-center">
 
-             <img src="IMG/Success.png" style="width:20%" class="w3-circle w3-margin-top">
+             <img src="IMG/Success.png" style="width:20%" style="width:30%" class="w3-circle w3-margin-top">
 
             <p>'.$resultado['mensaje'].'</p>
             <p>Por favor, preciona "volver" para volver a la pagina principal.</p>
@@ -110,7 +97,7 @@ if (isset($_POST['submit_create'])) {
 
          <div class="w3-container w3-center">
 
-            <img src="IMG/Error.png" style="width:20%" class="w3-circle w3-margin-top">
+            <img src="IMG/Error.png" style="width:20%" style="width:30%" class="w3-circle w3-margin-top">
 
             <p>'.$resultado['mensaje'].'</p>
             <p>Por favor preciona "volver" para intentarlo nuevamente.</p>
