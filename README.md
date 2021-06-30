@@ -29,3 +29,5 @@ Una vez con todo los programas necesarios estén instalados, se puede proceder a
 2. A continuación descomprimiremos el archivo
 3. Luego de esto se debe copiar la carpeta (completa) de la aplicación para pegarla en el directorio donde se albergan las páginas webs en el servidor que descargamos, en este caso en XAMPP el directorio es en "C:/xampp/htdocs"
 4. Con esto ya estaría instalada la aplicación, para acceder a esta y utilizarla, basta con dirigirse al localhost mediante un navegador web, con el servidor corriendo en segundo plano.
+5. Una vez entre a la interfaz, lo mas seguro es que te de un error, ya que la base de datos no esta instalada aun. Para instalarla, simplemente has click sobre la cabecera de la pagina (la que dice "CRUD") y aparecera un panel con informacion acerca de la aplicacion, en la seccion de "instalacion", habra un boton que dice "instalar" al final (es de color amarillo), con solo darle click a este podras instalar la base de datos facilmente.
+6. (opcional) si esto no funciona, simpre puedes copiar el contenido del archivo "DB.sql" que se encuentra en la carpeta DB y pegarlo (para ejecutarlo) en la consola del servidor.
